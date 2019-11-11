@@ -1,0 +1,345 @@
+%From https://egu2018.eu/PICO_how-to_guide_to_PICO.pdf
+%Abstracted and templated by Brian Ballsun-Stanton, Macquarie University.
+%original template by https://github.com/snowtechblog/pico-latex-presentation by Anselm Köhler
+
+\documentclass[unknownkeysallowed,usepdftitle=false, parskip=full]{beamer}
+% unknownkeysallowed is needed for mac and the newer latex version -> is more picky than before...
+\usetheme[headheight=1cm,footheight=2cm]{boxes}
+%\usetheme{default}
+
+
+\usepackage{default}
+\usepackage{graphicx}
+%example pictures created via: http://lorempixel.com/1200/800/cats/Figure2/. Credit to http://lorempixel.com/images.php
+
+\usepackage{epsfig}
+\usepackage{siunitx}
+\usepackage{color}
+\usepackage{ifthen}
+%usepackage{ragged2e}
+
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+%https://tex.stackexchange.com/a/203804/5483
+
+\usepackage[activate={true,nocompatibility},final,tracking=true,kerning=true,spacing=true,factor=1100,stretch=10,shrink=10]{microtype} % http://www.khirevich.com/latex/microtype/
+\microtypecontext{spacing=nonfrench}
+
+\usepackage{lipsum} % for dummy text only
+\usepackage[UKenglisttps://tex.stackexchh]{babel} %hange.com/a/27743 
+\usepackage[pangram]{blindtext} % https://tex.stackexchange.com/a/48411
+
+%\usepackage{parskip} % from https://tex.stackexchange.com/q/11622
+%\setlength{\parskip}{12pt} 
+
+%\setparsizes{\parindent}{12pt}{\parfillskip}
+
+%\usepackage{etoolbox} % as per https://tex.stackexchange.com/a/24331
+%\appto\chapterheadendvskip{\vspace{-1\parskip}}
+%\setparsizes{\parindent}{50pt plus 20pt minus 30pt}{\parfillskip}
+
+\setbeamertemplate{navigation symbols}{}%remove navigation symbols
+\setbeamersize{text margin left=1cm,text margin right=1cm}
+
+% some colors
+\definecolor{grau}{gray}{.5}
+\definecolor{slfcolor}{rgb}{0,0.6274,0.8353}
+\definecolor{wslcolor}{rgb}{0,0.4,0.4}
+
+% setup links
+\hypersetup{%
+	%linkbordercolor=green,%
+	colorlinks=false,%
+	pdfborderstyle={/S/U/W 0},%
+	%pdfpagemode=FullScreen,%
+	pdfstartpage=4%
+	}
+
+% setup some fonts
+\setbeamerfont{title}{series=\bfseries, size=\small}
+\setbeamerfont{author}{size*={5pt}{0pt}}
+\setbeamerfont{institute}{size*={3pt}{0pt}}
+\setbeamerfont{bodytext}{size=\scriptsize}
+	
+% Title setup	
+\title{Damoon Jehani's Presentation: \\ Evernote, Zotero and File Juggler}
+\author{Damoon Jehani\inst{1} (\texttt{damoon.jehani@students.mq.edu.au}) \inst{1}}
+\institute{\inst{1}Macquarie University, Sydney, NSW}
+
+% add title in headbox
+\setbeamertemplate{headline}
+{\leavevmode
+\begin{beamercolorbox}[width=1\paperwidth]{head title}
+  % LOGO
+  \begin{columns}[t, totalwidth=\textwidth]
+  \begin{column}[c]{1.05cm}
+   \includegraphics[width=1cm]{evernoteicon.png}
+  \end{column}
+  % TITLE
+   \begin{column}[c]{10.6cm}
+   \centering \usebeamerfont{title} \textcolor{slfcolor}{\inserttitle} \\
+   \centering \usebeamerfont{author} \color[rgb]{0,0,0} \insertauthor \\
+   \vspace{-0.05cm}
+   \centering \usebeamerfont{institute} \insertinstitute
+  \end{column}
+  % PICTURE
+  \begin{column}[c]{1.15cm}
+    \hspace{0.005cm}
+    \includegraphics[width=1cm]{MQuniLogo.png}
+  \end{column}
+  \end{columns}
+  {\color{slfcolor}\hrule height 1pt\vspace{0.1cm}}
+\end{beamercolorbox}%
+}
+
+% setup the navigation in footbox
+% first set some button colors
+\newcommand{\buttonactive}{\setbeamercolor{button}{bg=wslcolor,fg=white}}
+\newcommand{\buttonpassive}{\setbeamercolor{button}{bg=slfcolor,fg=black}}
+% now set up that the one active one gets the new color.
+\newcommand{\secvariable}{nothing}
+% therefore we write before each section (well, everything which should be part of the navi bar)
+% the variable \secvariable to any name which is in the next function ...
+\newcommand{\mysection}[1]{\renewcommand{\secvariable}{#1}
+}
+% ... compaired to strings in the following navibar definition ...
+\newcommand{\tocbuttoncolor}[1]{%
+ \ifthenelse{\equal{\secvariable}{#1}}{%
+    \buttonactive}{%
+    \buttonpassive}
+ }
+% ... here we start to set up the navibar. each entry is calling first the function \tocbuttoncolor with the argument which should be tested for beeing active. if active, then change color. afterwards the button is draw. so to change that, you need to change the argument in \toc..color, the first in \hyperlink and before each frames definition... A bit messed up, but works...
+\newlength{\buttonspacingfootline}
+\setlength{\buttonspacingfootline}{-0.2cm}
+\setbeamertemplate{footline}
+{\leavevmode
+\begin{beamercolorbox}[width=1\paperwidth]{head title}
+  {\color{slfcolor}\hrule height 1pt}
+  \vspace{0.05cm}
+  % set up the buttons in an mbox
+  \centering \mbox{
+    \tocbuttoncolor{abstract}
+    \hyperlink{abstract}{\beamerbutton{2 Minute Madness}}
+    \tocbuttoncolor{radar}
+    \hspace{\buttonspacingfootline}
+      \hyperlink{radar}{\beamerbutton{Evernote}}
+
+    \tocbuttoncolor{line}
+    \hspace{\buttonspacingfootline}
+      \hyperlink{line}{\beamerbutton{Zotero}}
+    \tocbuttoncolor{major}
+    \hspace{\buttonspacingfootline}
+      \hyperlink{major}{\beamerbutton{Dropbox}}
+    \tocbuttoncolor{slab}
+    \hspace{\buttonspacingfootline}
+      \hyperlink{slab}{\beamerbutton{Zotfile}}
+    \tocbuttoncolor{minor}
+    \hspace{\buttonspacingfootline}
+      \hyperlink{minor}{\beamerbutton{File Juggler}}
+    \tocbuttoncolor{conclusion}
+    \hspace{\buttonspacingfootline}
+      \hyperlink{conclusion}{\beamerbutton{Conclusion}}
+    % this last one should normaly not be used... it will open the preferences to change the 
+    % behaviour of the acrobat reader in fullscreen -> usefull in pico...
+    \setbeamercolor{button}{bg=white,fg=black}
+    % for presentation
+    %\hspace{-0.1cm}\Acrobatmenu{FullScreenPrefs}{\beamerbutton{\#}}
+    % for upload
+    
+     
+\Acrobatmenu{FullScreenPrefs}{\vspace{0.3cm}\hspace{0.24cm}\mbox{%
+      \includegraphics[height=0.04\textheight,keepaspectratio]{%
+	  figure/CreativeCommons_Attribution_License.eps}%
+	  }}
+   }
+    \vspace{0.05cm}
+\end{beamercolorbox}%
+}
+
+
+\begin{document}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\mysection{abstract}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}\label{\secvariable}
+
+\usebeamerfont{bodytext}
+
+\parbox{\linewidth}{
+
+%Original template: https://github.com/snowtechblog/pico-latex-presentation by Anselm Köhler
+
+\textbf{What is the Aim:} The aim of this pipeline was to make the process of going from Zotero to Evernote much more simpler. This was achieved through an automated process that combined File Juggler, Dropbox, Evernote, Zotero and ZotFile.   
+\vspace{12pt}
+
+\textbf{Why:} This pipeline was chosen as it allowed me to transition information between Zotero and Evernote. Additionally; I have not used cloud services before to back up file. I decided this workflow would be the perfect time to do it as I've lost many files locally. This will be done through the integration of Dropbox into this workflow.   
+\vspace{12pt}
+
+\textbf{Useful for:} This workflow is highly useful for anyone seeking to integrate evernote into an automatic pipeline that is able to backup data. 
+\vspace{12pt}
+
+\textbf{Significance:} This workflow will provide better time management as it allows for processes such as uploading to Evernote to be done automatically, alongside Dropbox, therefore elliminating the pain and hastle of backing up and storing data. 
+\vspace{12pt}
+
+
+
+}
+ 
+  
+\end{frame}
+
+\begin{frame}\label{\secvariable}
+  \begin{columns}[t]
+  %https://tex.stackexchange.com/a/7452/5483
+  \begin{column}[c]{0.45\textwidth}
+%http://lorempixel.com/1200/800/cats/Figure2/     
+%http://lorempixel.com/1200/800/cats/Figure3/
+\includegraphics[width=1\textwidth,height=0.5\textheight,keepaspectratio]{%
+workflow.png}\\
+\vspace{12pt}
+    \end{column}
+    \begin{column}[c]{0.50\textwidth}
+    \parbox{\linewidth}{
+      
+  
+ \textbf{WorkFlow Summary:} This workflow will start from Zotero (where the metadata will be extracted), and through the plugin labelled ZotFile, will automatically store the data of all articles on my secured DropBox Server. Afterwards, FileJuggler will have access to the folder and enact a rule for when documents appear in the Drop-Box folder. These will automatically be uploaded into evernote. 
+\vspace{8pt}
+
+
+             
+ 
+   
+      }
+    \end{column}
+    
+  \end{columns}
+
+  
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\mysection{radar}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}\label{\secvariable}
+  \begin{columns}[t]
+  %https://tex.stackexchange.com/a/7452/5483
+    \begin{column}[c]{0.50\textwidth}
+    \parbox{\linewidth}{
+
+\textbf{Using Evernote:} 
+Evernote is an extensive note-taking application which can be used on Windows, MacOS, Android, Linux and iOS making it one of the most popular applications for this purpose. Evernote will be used as the main-note taking application for the purposes of this work-flow. https://evernote.com/download    
+      \vspace{8pt}
+      
+      }
+    \end{column}
+    \begin{column}[c]{0.45\textwidth}
+%http://lorempixel.com/1200/800/cats/Figure2/     
+%http://lorempixel.com/1200/800/cats/Figure3/
+\includegraphics[width=1\textwidth,height=0.5\textheight,keepaspectratio]{%
+evernotepic.png}\\
+\vspace{12pt}
+    \end{column}
+  \end{columns}
+
+  
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\mysection{line}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}\label{\secvariable}
+\begin{center}
+  \vspace{-0.5cm}
+  %http://lorempixel.com/1200/800/cats/Figure4/
+ \includegraphics[width=1\textwidth,height=0.75\textheight,keepaspectratio]{%
+  zoteropng.png}
+\end{center}
+  \vspace{-0.5cm}
+   \textbf{Using Zotero:} Zotero is an open-source program that manages bibliographic data in a highly accessible way. It operates on Windows, macOS and Linux. The basis of its programing language is JavaScript. For this workflow, Zotero is being used to allow the extraction of bibliographic meta-data for use in Evernote. 
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\mysection{major}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}\label{\secvariable} %%Eine Folie
+\begin{center}
+%http://lorempixel.com/1200/800/cats/Figure5/
+\includegraphics[width=1\textwidth,height=0.8\textheight,keepaspectratio]{%
+dropboxtransparent.png}
+\end{center}
+
+    \parbox{\linewidth}{
+\textbf{Dropbox:} With Dropbox we simply install it and allocate a folder to use for its cloud service.
+}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\mysection{slab}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}\label{\secvariable}
+%http://lorempixel.com/1200/800/cats/Figure6/
+\begin{center}
+\includegraphics[width=1\textwidth,height=0.75\textheight,keepaspectratio]{%
+zotfile.png}
+\end{center}
+    \parbox{\linewidth}{
+
+Zotfile as a PDF management plugin for Zotero that allows the program to automatically move PDF’s into specific folders or even sync them with other devices.  
+
+}
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\mysection{minor}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}\label{\secvariable} %%Eine Folie
+\begin{center}
+%http://lorempixel.com/1200/800/cats/Figure7/
+\includegraphics[width=1\textwidth,height=0.7\textheight,keepaspectratio]{%
+FJpreferences.png}
+\end{center}
+\vspace{-0.2cm}
+
+\textbf{Using FileJuggler:} File Juggler is a folder and document manager that allows for the user to create specific rules when an action occurs. File Juggler, in this workflow, will be used to transfer files from the Dropbox folder into Evernote automatically for a more complete automation process. 
+
+
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\mysection{minor}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}\label{\secvariable} %%Eine Folie
+\begin{center}
+%http://lorempixel.com/1200/800/cats/Figure7/
+\includegraphics[width=1\textwidth,height=0.7\textheight,keepaspectratio]{%
+screenshot of log.png}
+\end{center}
+\vspace{-0.2cm}
+
+%
+\textbf{Combining tools:} Now with Evernote, Zotero, Dropbox, Zotfile and File Juggler set up we should be able to get this workflow going. Any file that I open up through Zotero (including web links) should automatically be able to save on my Dropbox server, and then, upload to Evernote for note-taking at a later time.
+
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\mysection{conclusion}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}\label{\secvariable}
+
+  Thanks for Listening! And remember say no to Macquarie Uni's plans to abolish the faculty of Human Sciences:
+
+
+  \usebeamerfont{bodytext}
+ 
+
+\end{frame}
+
+
+
+\end{document}
